@@ -52,7 +52,7 @@ void loop()
     analogWrite(enA, 200);
     analogWrite(enB, 200);
  /*'
-  * Here I am going to put an if statement but I aint sure how close we want the car to be to make it stop so it's commented till we test it
+  * //Here I am going to put an if statement but I aint sure at what distance we want the car to stop so it's commented till we test it
   * 
   * if(distance <= 10)
   * {
@@ -69,10 +69,9 @@ void loop()
   *    continue;
   * }
   */
-
+//those lines arent important but if you wanna see in the thingy.
   Serial.print("Distance: ");
   Serial.print(distance);
   Serial.println(" cm"); 
-
   delay(500);                         //wait for sometime to prevent flooding the terminal
 }
