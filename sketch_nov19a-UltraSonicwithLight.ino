@@ -45,8 +45,6 @@ void setup() {
   Serial.begin(9600);
   Wire.begin();
   lightMeter.begin();
-
-  
   //*****Ultrasonic*****
    pinMode(TRIGGER_PIN_1, OUTPUT);
   pinMode(ECHO_PIN_1, INPUT);
@@ -90,27 +88,33 @@ void loop() {
     if(distanceOne>10)
     {
       forward();
-       if(distanceThree<10)
+       /*if(distanceThree<10)
         {
            left();
         }
          if(distanceFour<10)
          {
             right();
-         }
-    }//inner if
+         }*/
+    }// if
    else if(distanceTwo>10)
     {
       backwards();
-       if(distanceThree<10)
+      /* if(distanceThree<10)
         {
            left();
         }
          if(distanceFour<10)
          {
             right();
-         }
-    }//else
+         }*/
+    }//else if
+    else if(distanceThree>10){
+      right();
+    }//else if
+    else {
+      left();
+    }
    
   }//light if
     delay(2000);
@@ -122,7 +126,7 @@ void loop() {
     
 }//loop
 
-int ReadLightValue(){
+float ReadLightValue(){
   float Value;
   Value = lightMeter.readLightLevel(true);
   return Value;  
