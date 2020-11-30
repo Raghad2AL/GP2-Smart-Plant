@@ -38,15 +38,18 @@ int enB = 5;
 
 //***Light Sensor***
 BH1750 lightMeter;
+BH1750 backLightMeter;
+
 float LightValue;
 
 int Value;
-
+int newVal = 1000;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   Wire.begin();
   lightMeter.begin();
+  backLightMeter.begin();
   //*****Ultrasonic*****
    pinMode(TRIGGER_PIN_1, OUTPUT);
   pinMode(ECHO_PIN_1, INPUT);
@@ -74,7 +77,7 @@ void setup() {
   pinMode(enB, OUTPUT);
 
 }
-
+int val = 0;
 void loop() {
   // put your main code here, to run repeatedly:
   LightValue =  ReadLightValue();
@@ -83,30 +86,30 @@ void loop() {
   distanceThree = Ultrasonic_Three();
   distanceFour = Ultrasonic_Four();
   delay(2000);
-  
-  
+    Serial.println("dsds");
+float sth =  ReadBackLightValue();
   //Check if we need light
-  if(LightValue >= 200 && LightValue < 1000 )
+  if( LightValue < 500 )
   {
-    if(distanceOne>10)
-    {
-       Value= Movement(0);
-    }// if
-   else if(distanceTwo>10)
-    {
-      Value= Movement(3);
-    }//else if
-    else if(distanceThree>10){
-       Value= Movement(1);
-    }//else if
-    else {
-       Value= Movement(2);
-    }
-   
-  }//light if
-    delay(2000);
+      Movement(val);
+      delay(2000);
+      StopTheCar();
+      newVal = ReadLightValue();
+      if(newVal <= LightValue){
+        if(val == 3){
+          val = 0;
+        }
+        val = val +1;
+      } 
+        LightValue = newVal;
+             Serial.println("sth");
+
+     Serial.println(sth);
+      
+  }
+    delay(200);
     //Found the Sun, stop
-    if(LightValue>1000)
+    if(LightValue>500)
     {
       StopTheCar();
     }
@@ -119,7 +122,11 @@ float ReadLightValue(){
   return Value;  
 }
 
-
+float ReadBackLightValue(){
+  float Value;
+  Value = backLightMeter.readLightLevel(true);
+  return Value;  
+}
 int Ultrasonic_One(){
   int distance;
   digitalWrite(TRIGGER_PIN_1, HIGH);    //send trigger pulse
@@ -176,55 +183,71 @@ int Movement(int value){
   int valuein = value;
   switch (valuein){
     case 0: //forward
-     analogWrite(enA, 200);
-    analogWrite(enB, 200);
- digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW);
-    digitalWrite(in3, HIGH);
-    digitalWrite(in4, LOW);
+    if(distanceOne>20)
+    {
+    forward();
+    }
     break;
 
     case 1: //right
-     analogWrite(enA, 130);
-    analogWrite(enB, 130);
-   digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW);
-    digitalWrite(in3, LOW);
-    digitalWrite(in4, LOW);
-    delay(3000);
-    analogWrite(enA, 200);
-    analogWrite(enB, 200);
-   digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW);
-    digitalWrite(in3, HIGH);
-    digitalWrite(in4, LOW);
+    if(distanceThree>20){
+    right();
+    }
      break;
 
      case 2://left
-      analogWrite(enA, 200);
-    analogWrite(enB, 200);
- digitalWrite(in1, LOW);
-    digitalWrite(in2, LOW);
-    digitalWrite(in3, HIGH);
-    digitalWrite(in4, LOW);
-    delay(3000);
-    analogWrite(enA, 200);
-    analogWrite(enB, 200);
-   digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW);
-    digitalWrite(in3, HIGH);
-    digitalWrite(in4, LOW);
+       if(distanceFour>20)
+    {
+      left();
+    }
      break;
 
      case 3:
-      analogWrite(enA, 130);
-    analogWrite(enB, 130);
-    digitalWrite(in2, HIGH);
-    digitalWrite(in1, LOW);
-    digitalWrite(in4, HIGH);
-    digitalWrite(in3, LOW);
+     if(distanceTwo>20)
+    {
+      backwards();
+    }
     break;
     
   }
   return valuein;
 }//function
+
+
+void forward() {
+      analogWrite(enA, 200);
+    analogWrite(enB, 200);
+ digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);
+}
+
+void right() {
+      analogWrite(enA, 150);
+    analogWrite(enB, 150);
+ digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, LOW);
+    delay(5000);
+    forward();
+}
+void left() {
+      analogWrite(enA, 150);
+    analogWrite(enB, 150);
+ digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);
+    delay(5000);
+    forward();
+}
+void backwards() {
+      analogWrite(enA, 190);
+    analogWrite(enB, 190);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, HIGH);
+}
