@@ -1,0 +1,107 @@
+#include <Wire.h>
+
+#include <SoftwareSerial.h>
+
+//SoftwareSerial hc06(19,18);
+char c ;
+int enA = 10;
+int enB = 5;
+int in1 = 9;
+int in2 = 8;
+int in3 = 7;
+int in4 = 6;
+bool flag = true;
+bool once = true;
+void setup(){
+  //Initialize Serial Monitor
+  Serial.begin(9600);
+    Serial2.begin(38400);
+
+  Serial.println("ENTER AT Commands:");
+      Wire.begin();
+
+  Serial3.write("hi to serial 0");
+  Serial.write("hi to serial1");
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+  pinMode(enA, OUTPUT);
+  pinMode(enB, OUTPUT);
+
+}
+
+void loop(){
+  //Write data from HC06 to Serial Monitor
+
+
+
+  if (Serial2.available() > 0){
+    c = Serial2.read();
+            Serial.println("vv");
+once = false;
+        Serial.println(c);
+        backwards();
+
+  }
+if(flag){  forward();
+flag=false;}
+  delay(100);
+  if(once == true){
+      right();
+      delay(150);  
+      stopp();
+
+  }
+delay(200);
+}
+
+
+
+
+void right() {
+  analogWrite(enA, 150);
+  //analogWrite(enB, 160);
+ digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, LOW);
+   // forward();
+}
+
+void forward() {
+      analogWrite(enA, 190);
+    analogWrite(enB, 190);
+ digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);
+}
+void left() {
+      analogWrite(enA, 100);
+    analogWrite(enB, 100);
+ digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);
+    delay(3000);
+    //forward();
+}
+void backwards() {
+      analogWrite(enA, 200);
+    analogWrite(enB, 200);
+ digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, HIGH);
+}
+void stopp() {
+  analogWrite(enA, 0);
+  analogWrite(enB, 0);
+ digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, LOW);
+    delay(300);
+    //forward();
+}
