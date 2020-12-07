@@ -2,30 +2,30 @@
 #include <BH1750.h>
 
 //pins for the ultrasonic, those are digtial, we can also use pin 3 and 2. // trig = 2
-#define TRIGGER_PIN_1   2
-#define ECHO_PIN_1      3
+#define TRIGGER_PIN_1   30
+#define ECHO_PIN_1      31
 int echoTimeOne;             //time in us
 float distanceOne;           //distance in 
-//***** First Ultrasonic**********
+//***** First forward Ultrasonic**********
 
 #define TRIGGER_PIN_2   11
 #define ECHO_PIN_2      12
 int echoTimeTwo;             //time in us
 float distanceTwo;           //distance in 
-//******Second Ultrasonic*********
+//******Second back Ultrasonic*********
 
-#define TRIGGER_PIN_3   4
-#define ECHO_PIN_3      13
+#define TRIGGER_PIN_3   2
+#define ECHO_PIN_3      3
 int echoTimeThree;             //time in us
 float distanceThree;           //distance in 
-//******Third Ultrasonic*********
+//******Third right Ultrasonic*********
 
 
 #define TRIGGER_PIN_4   22
 #define ECHO_PIN_4      23
 int echoTimeFour;             //time in us
 float distanceFour;           //distance in 
-//******Fourth Ultrasonic*********
+//******Fourth left Ultrasonic*********
 
 //pins for the car
 int in1 = 9;
